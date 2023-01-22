@@ -5,7 +5,7 @@ namespace MovieTheater.Models
 {
     public class MovieGenre
     {  
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [ForeignKey("Movie")]
         public Guid MovieId { get; set; }
         public Movie Movie { get; set; }
@@ -13,6 +13,7 @@ namespace MovieTheater.Models
 
         public MovieGenre(Genre genre)
         {
+            Id = Guid.NewGuid();
             Genre = genre;
         }
     }

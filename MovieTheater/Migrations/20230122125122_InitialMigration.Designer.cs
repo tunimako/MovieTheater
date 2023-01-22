@@ -12,7 +12,7 @@ using MovieTheater.Data;
 namespace MovieTheater.Migrations
 {
     [DbContext(typeof(MovieTheaterDbContext))]
-    [Migration("20230122011239_InitialMigration")]
+    [Migration("20230122125122_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,7 @@ namespace MovieTheater.Migrations
                     b.Property<int>("CloseTimeMinutes")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -90,11 +90,9 @@ namespace MovieTheater.Migrations
 
             modelBuilder.Entity("MovieTheater.Models.CinemaHall", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
@@ -150,8 +148,8 @@ namespace MovieTheater.Migrations
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ShowTimeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ShowTimeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ClientId", "ShowTimeId");
 
@@ -209,11 +207,9 @@ namespace MovieTheater.Migrations
 
             modelBuilder.Entity("MovieTheater.Models.MovieGenre", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Genre")
                         .HasColumnType("int");
@@ -230,20 +226,15 @@ namespace MovieTheater.Migrations
 
             modelBuilder.Entity("MovieTheater.Models.ShowTime", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CinemaHallId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CinemaHallId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CinemaId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("MovieId")
                         .HasColumnType("uniqueidentifier");
@@ -270,11 +261,15 @@ namespace MovieTheater.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MovieTheater.Models.Company", null)
+                    b.HasOne("MovieTheater.Models.Company", "Company")
                         .WithMany("Cinemas")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("MovieTheater.Models.CinemaHall", b =>

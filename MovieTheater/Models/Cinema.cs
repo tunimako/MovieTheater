@@ -15,6 +15,9 @@ namespace MovieTheater.Models
         public int OpenTimeMinutes { get; set; }
         public int CloseTimeHour { get; set; }
         public int CloseTimeMinutes { get; set; }
+        [ForeignKey("Company")]
+        public Guid CompanyId { get; set; }
+        public Company Company { get; set; }
         public ICollection<CinemaHall> CinemaHalls { get; set; }
         public ICollection<ShowTime> ShowTimes { get; set; }
 

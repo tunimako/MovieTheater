@@ -24,8 +24,8 @@ namespace MovieTheater.Models
         public Client(string firstName, string lastName, DateTime dateOfBirth, string username, string password)
         {
             Id = Guid.NewGuid();
-            FirstName = lastName;
-            LastName = firstName;
+            FirstName = firstName;
+            LastName = lastName;
             DateOfBirth = dateOfBirth;
             Username = username;
             Password = password;

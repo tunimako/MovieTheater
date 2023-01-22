@@ -82,7 +82,7 @@ namespace MovieTheater.Migrations
                     OpenTimeMinutes = table.Column<int>(type: "int", nullable: false),
                     CloseTimeHour = table.Column<int>(type: "int", nullable: false),
                     CloseTimeMinutes = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,15 +97,15 @@ namespace MovieTheater.Migrations
                         name: "FK_Cinemas_Company_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Company",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "MoviesGenres",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Genre = table.Column<int>(type: "int", nullable: false)
                 },
@@ -124,8 +124,7 @@ namespace MovieTheater.Migrations
                 name: "CinemaHalls",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CinemaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AvailableSeats = table.Column<int>(type: "int", nullable: false)
                 },
@@ -144,12 +143,10 @@ namespace MovieTheater.Migrations
                 name: "ShowTimes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CinemaHallId = table.Column<int>(type: "int", nullable: false),
+                    CinemaHallId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CinemaId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -179,7 +176,7 @@ namespace MovieTheater.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShowTimeId = table.Column<int>(type: "int", nullable: false)
+                    ShowTimeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
