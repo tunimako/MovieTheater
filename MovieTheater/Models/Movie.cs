@@ -9,9 +9,11 @@ namespace MovieTheater.Models
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
+        [Display(Name = "Genre")]
         public ICollection<MovieGenre> MovieGenres { get; set; }
         public string Description { get; set; }
         public double Rating { get; set; }
+        [Display(Name = "Age rating")]
         public AgeRating AgeRating { get; set; }
         public TimeSpan Duration { get; set; }
         public ICollection<ShowTime> ShowTimes { get; set; }

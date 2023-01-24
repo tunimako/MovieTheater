@@ -14,7 +14,6 @@ namespace MovieTheater.Data
                 var context = serviceScope.ServiceProvider.GetService<MovieTheaterDbContext>();
 
                 context.Database.EnsureCreated();
-
                 if (!context.Company.Any())
                 {
                     Company comapny = new Company();

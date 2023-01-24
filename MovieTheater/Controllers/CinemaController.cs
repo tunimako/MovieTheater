@@ -14,9 +14,9 @@ namespace MovieTheater.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cinema = _context.Cinemas.ToList();
+            var cinema = await _context.Cinemas.Include(x =>x.CinemaHalls).ToListAsync();
             return View(cinema);
         }
         public IActionResult Kaunas()

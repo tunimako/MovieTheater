@@ -105,6 +105,9 @@
                             <h2 class="fw-normal">@item.Name.Remove(item.Name.Length - 5)</h2>
                             @*<p>Some representative placeholder content for the three columns of text below the carousel. This is the first column.</p>*@
                             <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+                            @foreach (var hall in item.CinemaHalls){
+                                <h1>@hall.Id, @hall.AvailableSeats</h1>
+                            }
                         </div>
 						<!-- /.col-lg-4 -->
 					}

@@ -1,10 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using MovieTheater.Data;
+using MovieTheater.Interfaces;
+using MovieTheater.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
 builder.Services.AddDbContext<MovieTheaterDbContext>(options =>
 {
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))
