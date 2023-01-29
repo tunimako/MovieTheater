@@ -139,5 +139,58 @@ namespace MovieTheater.Controllers
             _moviesRepository.UpdateMovie(movie);
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            //var checkBoxOptions = new List<EditMovieGenreViewModel>();
+            // foreach(Genre genre in Enum.GetValues(typeof(Genre)))
+            //{
+            //    var checBoxOption = new EditMovieGenreViewModel()
+            //    {
+            //        GenreName = genre.ToString(),
+            //        IsChecked = false
+            //    };
+            //    checkBoxOptions.Add(checBoxOption);
+            //}
+            
+            var movieVM = new EditMovieViewModel();
+            //movieVM.CheckedMovieGenres = checkBoxOptions;
+
+            return View(movieVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(EditMovieViewModel newMovie)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to create Movie");
+                return View("Create");
+            }
+            var movie = new Movie(newMovie.Name,
+                                  newMovie.Description,
+                                  newMovie.Rating,
+                                  newMovie.Duration,
+                                  newMovie.AgeRating);
+
+             var updatedMovieGernes = new List<MovieGenre>();
+
+            foreach (var genre in newMovie.CheckedMovieGenres)
+            {
+                MovieGenre movieGenre = new MovieGenre(Enum.TryParse(genre, out Genre genreValue) ?
+                                                       genreValue : throw new Exception("Could not parse the movie genre"));
+                movieGenre.MovieId = movie.Id;
+                movieGenre.Movie = movie;
+                updatedMovieGernes.Add(movieGenre);
+            }
+            movie.MovieGenres = updatedMovieGernes;
+            _moviesRepository.Add(movie);    
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Delete(string id)
+        {
+            var movie = await _moviesRepository.GetMovieByIdAsync(id);
+            _moviesRepository.Delete(movie);
+            return RedirectToAction("Index");
+        }
     }
 }

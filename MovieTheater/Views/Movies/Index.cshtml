@@ -5,11 +5,14 @@
 @{
     ViewData["Title"] = "Movies";
 }
-<h1>Movies</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div>
+    <div style ="width:30%; float:left">
+        <h1>Movies</h1>
+    </div>
+    <div style ="width:20%; float:right">
+        <a type="button" class="btn btn-lg btn-success" asp-controller="Movies" asp-action="Create">Add Movie</a>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -47,9 +50,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.AgeRating)
                 </td>*@
-                <td>
+                <td >
                     <a asp-action="Detail" asp-route-id="@item.Id">Detail</a> |
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

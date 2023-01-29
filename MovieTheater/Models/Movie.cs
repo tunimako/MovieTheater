@@ -1,5 +1,7 @@
-﻿using MovieTheater.Data.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MovieTheater.Data.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieTheater.Models
 {

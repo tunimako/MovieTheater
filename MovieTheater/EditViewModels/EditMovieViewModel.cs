@@ -1,6 +1,8 @@
-﻿using MovieTheater.Data.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MovieTheater.Data.Enums;
 using MovieTheater.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
 namespace MovieTheater.EditViewModels
@@ -8,14 +10,23 @@ namespace MovieTheater.EditViewModels
     public class EditMovieViewModel
     {
         public Guid Id { get; set; }
-        public string? Name { get; set; }
+        [StringLength(50, ErrorMessage = "Name length can't be more than 50.")]
+        [Required]
+        public string Name { get; set; }
         public ICollection<MovieGenre>? MovieGenres { get; set; }
-        public string? Description { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Range(1, 10)]
+        [Column(TypeName = "float(16, 1)")]
+        [Required]
         public double Rating { get; set; }
+        [Required]
         public AgeRating AgeRating { get; set; }
+        [Required]
         public TimeSpan Duration { get; set; }
         public ICollection<ShowTime>? ShowTimes { get; set; }
         public ICollection<EditMovieGenreViewModel> MovieGenresCheckBox { get; set; } = new List<EditMovieGenreViewModel>();
+        [Required]
         public List<string>? CheckedMovieGenres { get; set; }
     }
 }
