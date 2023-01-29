@@ -1,5 +1,4 @@
 ﻿using MovieTheater.Data.Enums;
-using MovieTheater.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace MovieTheater.Models
@@ -14,7 +13,7 @@ namespace MovieTheater.Models
         public string Description { get; set; }
         public double Rating { get; set; }
         [Display(Name = "Age rating")]
-        public AgeRating AgeRating { get; set; }
+        public AgeRating AgeRating { get; set; } 
         public TimeSpan Duration { get; set; }
         public ICollection<ShowTime> ShowTimes { get; set; }
 
@@ -27,6 +26,10 @@ namespace MovieTheater.Models
             Rating = rating;
             Duration = duration;
             AgeRating = ageRating;
+            ShowTimes = new List<ShowTime>();
+        }
+        public Movie()
+        {
             ShowTimes = new List<ShowTime>();
         }
     }

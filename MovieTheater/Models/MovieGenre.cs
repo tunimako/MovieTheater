@@ -1,4 +1,4 @@
-﻿using MovieTheater.Models.Enums;
+﻿using MovieTheater.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

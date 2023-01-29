@@ -1,7 +1,91 @@
 ﻿@model Movie
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<h>@Model</h>
+
+<div class="row" >
+	<div class="col-8" class="mb-3">
+		<div class="card">
+			<div class="card-header">
+				<div style="width:70%; float:left">
+					<h1>@Model.Name</h1>
+				</div>
+				<div style="width:30%; float:right">
+					<svg width="520" height="50">
+						<rect x="50" y="5" rx="10" ry="10" width="150" height="40"
+							  style="fill:#ECE026;stroke:black;stroke-width:2;" />
+						<text fill="#ffffff" font-size="20" font-family="Verdana" style="fill:black"
+							  x="56" y="32">IMDb: @Model.Rating/10</text>
+					</svg>
+				</div>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="mb-3">
+						@{
+							string movieGenres = "";
+							int count = 0;
+							foreach (var movieGenre in Model.MovieGenres)
+							{
+								movieGenres += movieGenre.Genre.ToString();
+								count++;
+								if (Model.MovieGenres.Count > count)
+								{
+									movieGenres += ", ";
+								}
+							}
+						}
+						<h4>@movieGenres</h4>
+					</div>
+					<div class="mb-3">
+						<h4>Description:</h4>
+						<p><span style="font-size: 20px">@Model.Description</span></p>
+					</div>
+					<div class="mb-3">
+						<p><span style="font-size: 26px">Movie Duration: </span> <span style="font-size: 20px">@Model.Duration</span></p>
+						<p><span style="font-size: 26px">Movie Age rating: </span> <span style="font-size: 20px">@Model.AgeRating </span></p>
+					</div>
+
+					<div class="mb-3">
+						<button class="btn btn-primary">Edit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<br><br>
+<h1 class ="mb-3">Movie Showtimes</h1>
+<table class="table">
+	<thead>
+		@foreach (var showtime in Model.ShowTimes)
+		{
+			<tr>
+				<th>
+					@Html.DisplayNameFor(modelItem => showtime.CinemaHall.Cinema.Name)
+				</th>
+				<th>
+					@Html.DisplayNameFor(modelItem => showtime.CinemaHall.AvailableSeats)
+				</th>
+			</tr>
+		}
+	</thead>
+	<tbody>
+		@foreach (var showtime in Model.ShowTimes)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => showtime.CinemaHall.Cinema.Name)
+				</td>
+				<td>
+					@{
+						int freeSeats = showtime.CinemaHall.AvailableSeats - showtime.ClientShowTimes.Count;
+					}
+					@freeSeats/@showtime.CinemaHall.AvailableSeats
+				</td>
+				<td>
+					<a asp-action="Detail" asp-route-id="@showtime.Id">Detail</a> |
+					<a asp-action="Edit" asp-route-id="@showtime.Id">Edit</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+

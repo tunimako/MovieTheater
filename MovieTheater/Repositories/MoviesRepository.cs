@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using MovieTheater.Data;
 using MovieTheater.Interfaces;
 using MovieTheater.Models;
-using MovieTheater.Models.Enums;
+using MovieTheater.Data.Enums;
+using System.Xml;
 
 namespace MovieTheater.Repositories
 {
@@ -17,15 +18,29 @@ namespace MovieTheater.Repositories
             _context = context;
         }
         public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
-        {
-            return await _context.Movies.Include(x => x.MovieGenres).ToListAsync();
+        { 
+            //return await _context.Movies.FromSqlInterpolated($"Exec getAllMoviesWithGenres").ToListAsync();
+            return await _context.Movies.Include(x => x.MovieGenres)
+                                        .Include(s=>s.ShowTimes)
+                                        .ThenInclude(c=>c.Cinema).ToListAsync();
         }
-        
-        
-        public async Task<IEnumerable<Movie>> GetMovieByIdAsync(string id)
+        public async Task<Movie> GetMovieByIdAsync(string? id)
         {
-            return await _context.Movies.FromSqlInterpolated($"exec getMovieById @Id={id}").ToListAsync();
-                //Movies.Include(x => x.MovieGenres).FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            //return await _context.Movies.FromSqlInterpolated($"execute getMovieById @Id={id}").ToListAsync();
+            return await _context.Movies.Include(x => x.MovieGenres)
+                                        .Include(s=>s.ShowTimes)
+                                        .ThenInclude(ch=>ch.CinemaHall)
+                                        .ThenInclude(c=>c.Cinema)
+                                        .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        }
+        public async Task<Movie> GetMovieByIdAsyncAsNoTracking(string? id)
+        {
+            return await _context.Movies.Include(x => x.MovieGenres)
+                            .Include(s => s.ShowTimes)
+                            .ThenInclude(ch => ch.CinemaHall)
+                            .ThenInclude(c => c.Cinema)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
         public bool Add(Movie movie)
         {
@@ -37,18 +52,35 @@ namespace MovieTheater.Repositories
             _context.Remove(movie);
             return Save();
         }
-        public bool Update(Movie movie)
+        public bool UpdateMovie(Movie movie)
         {
-            _context.Update(movie);
+            _context.Movies.Update(movie);
             return Save();
         }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();
+            //try
+            //{
+            //    var saved = _context.SaveChanges();
+            //}
+            //catch (DbUpdateConcurrencyException ex)
+            //{
+            //    var entry = ex.Entries.Single();
+            //    var clientValues = entry.Entity;
+            //    var databaseValues = entry.GetDatabaseValues();
+            //    return false;
+            //}
             return saved > 0 ? true : false;
         }
 
-        Task<Movie> IMoviesRepository.GetMovieAsync(string id)
+        Task<Movie> IMoviesRepository.GetMovieAsync(string? id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Movie movie)
         {
             throw new NotImplementedException();
         }

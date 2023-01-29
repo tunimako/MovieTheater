@@ -1,4 +1,4 @@
-﻿namespace MovieTheater.Models.Enums
+﻿namespace MovieTheater.Data.Enums
 {
     public enum Genre
     {

@@ -22,11 +22,11 @@ namespace MovieTheater.Repositories
         {
             return await _context.ShowTimes.Where(x => x.Cinema == cinema).ToListAsync();
         }
-        public async Task<Cinema> GetCinemaById(string id)
+        public async Task<Cinema> GetCinemaById(string? id)
         {
             return await _context.Cinemas.FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }
-        public async Task<Client> GetClientByIdAsync(string id)
+        public async Task<Client> GetClientByIdAsync(string? id)
         {
             return await _context.Clients.FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }   

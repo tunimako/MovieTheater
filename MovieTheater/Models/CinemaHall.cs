@@ -11,6 +11,7 @@ namespace MovieTheater.Models
         [ForeignKey("Cinema")]
         public Guid CinemaId { get; set; }
         public Cinema Cinema { get; set; }
+        [Display(Name = "Available seats")]
         public int AvailableSeats {get; set; }
         public ICollection<ShowTime> ShowTimes { get; set; }
 

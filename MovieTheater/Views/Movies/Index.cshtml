@@ -16,15 +16,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
+            <th align="center">
+                <h6>Number of showtimes</h6>
             </th>
-            <th>
+@*            <th>
                 @Html.DisplayNameFor(model => model.MovieGenres)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AgeRating)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -35,10 +35,10 @@
                 <th>
                     @Html.DisplayFor(modelItem => item.Name)
                 </th>
-                <td style="width: 50%">
-                    @Html.DisplayFor(modelItem => item.Description)
+               <td>
+                    @Html.DisplayFor(modelItem => item.ShowTimes.Count)
                 </td>
-                <td>
+@*                <td>
                     @foreach (var genre in item.MovieGenres)
                     {
                        <p>@Html.DisplayFor(g => genre.Genre)</p>
@@ -46,11 +46,10 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.AgeRating)
-                </td>
+                </td>*@
                 <td>
-                    <a href="/Movies/Edit/4">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Detail" asp-route-id="@item.Id">Detail</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                 </td>
             </tr>
         }

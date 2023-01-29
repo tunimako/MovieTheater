@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IMoviesRepository, MoviesRepository>();
+builder.Services.AddScoped<IMovieGenreRepository, MovieGenreRepository>();
 builder.Services.AddDbContext<MovieTheaterDbContext>(options =>
 {
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))

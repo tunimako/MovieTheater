@@ -7,6 +7,7 @@ namespace MovieTheater.Models
     {
         [Key]
         public Guid Id { get; set; }
+        [Display(Name = "Cinema Name")]
         public string Name { get; set; }
         [ForeignKey("Address")]
         public Guid AddressId { get; set; }
