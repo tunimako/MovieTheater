@@ -1,4 +1,4 @@
-﻿namespace MovieTheater.EditViewModels
+﻿namespace MovieTheater.ViewModels
 {
     public class EditMovieGenreViewModel
     {

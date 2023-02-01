@@ -1,0 +1,67 @@
+﻿@using MovieTheater.ViewModels
+@model ShowtimesMoviesViewModel
+
+@*asp-route-id="@showtime.CinemaHall.CinemaId"*@
+@foreach (var movie in Model.Movies)
+{
+	@foreach (var showtime in Model.Showtimes)
+	{
+		@if (movie.Name == showtime.Movie.Name)
+		{
+			<form method="post" asp-controller="Cinema" asp-action="ShowtimeCreate" asp-route-id="@showtime.CinemaHall.CinemaId" enctype=" multipart /form-data">
+			<h2>@showtime.Movie.Name</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th align="center">
+							<h6>Cinema hall</h6>
+						</th>
+						<th align="center">
+							<h6>Available seats</h6>
+						</th>
+						<th align="center">
+							<h6>Movie date</h6>
+						</th>
+						<th align="center">
+							<h6>Movie time</h6>
+						</th>
+						<th>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>
+							@showtime.CinemaHall.Id
+						</th>
+						<td>
+							@{
+								int freeSeats = showtime.CinemaHall.AvailableSeats;
+								if (showtime.ClientShowTimes != null)
+								{
+									freeSeats = showtime.CinemaHall.AvailableSeats - showtime.ClientShowTimes.Count;
+								}
+							}
+							@freeSeats / @showtime.CinemaHall.AvailableSeats
+						</td>
+						<td>
+							@showtime.Start.ToShortDateString()
+						</td>
+						<td>
+							@showtime.Start.ToShortTimeString()
+						</td>
+						<td>
+							<a asp-controller="Movies" asp-action="Detail" asp-route-id="@movie.Id">Detail</a> |
+							<a asp-action="Edit" asp-route-id="">Edit</a> |
+							<a asp-action="Delete" asp-route-id="">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="mb-3">
+					<button type="submit" class="btn btn-primary">New Showtime</button>
+			</div>
+			</form>
+		}
+	}
+}

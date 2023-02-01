@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
-namespace MovieTheater.EditViewModels
+namespace MovieTheater.ViewModels
 {
     public class EditMovieViewModel
     {
@@ -17,7 +17,6 @@ namespace MovieTheater.EditViewModels
         [Required]
         public string Description { get; set; }
         [Range(1, 10)]
-        [Column(TypeName = "float(16, 1)")]
         [Required]
         public double Rating { get; set; }
         [Required]

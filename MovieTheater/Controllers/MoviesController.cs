@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieTheater.Data;
 using MovieTheater.Data.Enums;
-using MovieTheater.EditViewModels;
+using MovieTheater.ViewModels;
 using MovieTheater.Interfaces;
 using MovieTheater.Models;
 using System.Xml.Linq;
@@ -105,7 +105,7 @@ namespace MovieTheater.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, EditMovieViewModel passedMovie)
         {         
-            if (!ModelState.IsValid && passedMovie.MovieGenres != null)
+            if (!ModelState.IsValid && passedMovie.MovieGenres != null) // patikrinti ar tikrai būtinas passedMovie patikrinimas
             {
                 ModelState.AddModelError("", "Failed to edit Movie");
                 return View("Edit", passedMovie);
@@ -140,7 +140,7 @@ namespace MovieTheater.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             //var checkBoxOptions = new List<EditMovieGenreViewModel>();
             // foreach(Genre genre in Enum.GetValues(typeof(Genre)))
@@ -159,7 +159,7 @@ namespace MovieTheater.Controllers
             return View(movieVM);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(EditMovieViewModel newMovie)
+        public IActionResult Create(EditMovieViewModel newMovie)
         {
             if (!ModelState.IsValid)
             {
