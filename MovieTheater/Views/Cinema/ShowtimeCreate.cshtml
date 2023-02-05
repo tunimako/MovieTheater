@@ -1,61 +1,81 @@
 ﻿@using MovieTheater.ViewModels
 @model CreateShowtimeViewModel
 
-<div>
-	<label class="form-label">Showtime creation</label>
-	<lable>Please fill all the nessecary information in order to create a showtime.</lable>
-	<form method="post" asp-controller="Cinema" asp-action="ShowtimeCreate" enctype="multipart/form-data">
-		<div class="mb-3">
-			<label for="Movie">Select movie:</label>
-			<select asp-for="Movies" asp-items="Model.Movies.Select(x => new SelectListItem() {Value = x.Name, Text = x.Name}).ToList()">
-				<option>--Select--</option>
-			</select>
-			<span asp-validation-for="Movies" class="text-danger"></span>
-@*		</div>
-		<div class="mb-3">
-			<label class="form-label">Show</label>
-			<lable>Please fill all the nessecary information in order to create a showtime.</lable>
-			<input asp-for="Name" type="text" class="form-control" />
-			<span asp-validation-for="Name" class="text-danger"></span>
-		</div>
-		<div class="mb-3">
-			<label class="form-label">Movie Description</label>
-			<textarea asp-for="Description" class="form-control" wrap="hard" style="height:200px"></textarea>
-			<span asp-validation-for="Description" class="text-danger"></span>
-		</div>
+<style>
+	#cardHeader {
+		font-size: 30px;
+		color: lightcoral;
+	}
 
-		<div class="mb-3">
-			<label class="form-label">Movie Genres:</label><br />
-			@{
-				foreach (var checkbox in @Html.GetEnumSelectList<Genre>())
-				{
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" value="@checkbox.Text" name="CheckedMovieGenres" id="checkbox_@checkbox.Text"/>
-								<label class="form-labl" for="checkbox_@checkbox.Text" style="border-radius: 25px; margin-right: 15px;">@checkbox.Text</label>
-							</div>
+	#cardBody {
+		font-size: 20px;
+		color: royalblue;
+	}
+</style>
+
+<form method="post" asp-controller="Cinema" asp-action="ShowtimeCreate" enctype="multipart/form-data">
+	<input type="hidden" asp-for="Id" id="">
+	<div class="card" style="width:800px">
+		<div class="card-header">
+			<label class="mb-3" id="cardHeader">Showtime creation</label>
+			<br />
+			<lable>Please fill all the nessecary information in order to create a showtime for <span style="font-size:20px">@Model.Cinema.Name</span>.</lable>
+		</div>
+		<div class="card-body">
+			<div class="mb-3">
+				<label class="form-label" id="cardBody">Select the movie:</label>
+				<select asp-for="MovieId" name="MovieId" id="MovieId">
+					@{
+						foreach (var movie in Model.Movies)
+						{
+							<option value="@movie.Id"> @movie.Name</option>
+						}
+					}
+				</select>
+				<span asp-validation-for="Movie" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<label class="form-label" id="cardBody">Select the cinema hall:</label><br />
+				@{
+					var cinemaHallCount = 0;
+					foreach (var cinemaHall in Model.Cinema.CinemaHalls.OrderBy(x => x.Id))
+					{
+						cinemaHallCount++;
+						<div class="form-check">
+							<input class="form-check-input" asp-for="CinemaHallId" type="radio" value="@cinemaHall.Id.ToString()" name="CinemaHallId" id="@cinemaHall.Id" />
+							<label class="form-labl" for="CinemaHallId" style="border-radius: 25px; margin-right: 15px;">Hall-@cinemaHallCount (Number of seats: @cinemaHall.AvailableSeats)</label>
+						</div>
+					}
 				}
+				<span asp-validation-for="Cinema" class="text-danger"></span>
+			</div>
+			<div class="mb-3" style="width:400px">
+				<label class="form-lable" type="radio" id="cardBody">Showtime day</label>
+				<input asp-for="Day" type="date" value="@DateTime.Today" class="form-control" />
+				<span asp-validation-for="Day" class="text-danger"></span>
+			</div>
+			<div class="mb-3" style="width:400px">
+				<label class="form-label" id="cardBody">Showtime start</label>
+				<input asp-for="Time" type="time" class="form-control" />
+				<span asp-validation-for="Time" class="text-danger"></span>
+				@{
+					var openTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+					Model.Cinema.OpenTimeHour, Model.Cinema.OpenTimeMinutes, 0);
+					var closeTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day,
+					Model.Cinema.CloseTimeHour, Model.Cinema.CloseTimeMinutes, 0);
+				}
+				<lable style="font-size: 14px;">Please consider the movie theater working hours (@openTime.ToShortTimeString() - @closeTime.ToShortTimeString())</lable>
+			</div>
+			<div>
+				<button type="submit" class="btn btn-primary">Submit showtime</button>
+			</div>
+			@if (TempData["Error"] != null)
+			{
+				<br />
+				<div class="col-md-8 alert alert-danger">
+					<span><b>Error</b> - @TempData["Error"]</span>
+				</div>
 			}
-			<span asp-validation-for="MovieGenres" class="text-danger"></span>
 		</div>
-		<div class="mb-3">
-			<label class="form-label">Movie Rating (IMDb): </label>
-			<input asp-for="Rating" type="text" />
-			<span asp-validation-for="Rating" class="text-danger"></span>
-		</div>
-		<div class="mb-3">
-			<label for="AgeRating">Age Rating:</label>
-			<select asp-for="AgeRating" asp-items="@Html.GetEnumSelectList<AgeRating>()" >
-				<option>--Select--</option>
-			</select>
-			<span asp-validation-for="AgeRating" class="text-danger"></span>
-		</div>
-		<div class="mb-3">
-			<label class="form-label">Movie Duration</label>
-			<input asp-for="Duration" type="time" />
-			<span asp-validation-for="Duration" class="text-danger"></span>
-		</div>
-		<div>
-			<button type="submit" class="btn btn-primary">Create</button>
-		</div>*@
-	</form>
-</div>
+	</div>
+</form>

@@ -7,6 +7,7 @@ namespace MovieTheater.Interfaces
         public Task<IEnumerable<Movie>> GetAllMoviesAsync();
         public Task<Movie> GetMovieAsync(string? id);
         public Task<Movie> GetMovieByIdAsync(string? id);
+        public Movie GetMovieById(string? id);
         public Task<Movie> GetMovieByIdAsyncAsNoTracking(string? id);
         bool Add(Movie movie);
         bool Update(Movie movie);

@@ -1,0 +1,100 @@
+﻿@using MovieTheater.ViewModels
+@using MovieTheater.Models
+@model ClientShowtimesViewModel
+
+@{
+	List<Movie> theaterMovies = new List<Movie>();
+	theaterMovies.AddRange(Model.Showtimes.Select(x => x.Movie).ToList().Distinct());
+	if (TempData["Error"] != null)
+	{
+		<div class="col-md-12 alert alert-danger">
+			<span><b>Error</b> - @TempData["Error"]</span>
+		</div>
+	}
+	else if (TempData["Success"] != null)
+	{
+		<div class="col-md-12 alert alert-success">
+			<span><b>Success</b> - @TempData["Success"]</span>
+		</div>
+	}
+	foreach (var movie in theaterMovies)
+	{
+		int movieCheck = 0;
+		<table class="table">
+			@foreach (var showtime in Model.Showtimes)
+			{
+				if (movie.Name == showtime.Movie.Name && movieCheck == 0)
+				{
+					movieCheck++;
+					<h2>@showtime.Movie.Name</h2>
+					<thead>
+						<tr>
+							<th align="center">
+								<h6>Cinema hall</h6>
+							</th>
+							<th align="center">
+								<h6>Available seats</h6>
+							</th>
+							<th align="center">
+								<h6>Movie date</h6>
+							</th>
+							<th align="center">
+								<h6>Movie time</h6>
+							</th>
+
+							<th>
+							</th>
+						</tr>
+					</thead>
+				}
+				if (movie.Name == showtime.Movie.Name)
+				{
+					<tbody>
+						<tr>
+							<th>
+								@{
+									int cinemaHallCount = 0;
+								}
+								@foreach (var cinemaHall in Model.Cinema.CinemaHalls.OrderBy(x => x.Id).ToList())
+								{
+									cinemaHallCount++;
+									if (cinemaHall.Id == showtime.CinemaHallId)
+									{
+										<p>Hall - @cinemaHallCount</p>
+									}
+								}
+							</th>
+							@{
+								int freeSeats = showtime.CinemaHall.AvailableSeats;
+								if (showtime.ClientShowTimes != null)
+								{
+									freeSeats = showtime.CinemaHall.AvailableSeats - showtime.ClientShowTimes.Count;
+								}
+								<td>
+									@freeSeats / @showtime.CinemaHall.AvailableSeats
+								</td>
+								<td>
+									@showtime.Start.ToShortDateString()
+								</td>
+								<td>
+									@showtime.Start.ToShortTimeString()
+								</td>
+								<td>
+									<form method="post" asp-controller="Account" asp-action="Reserve" enctype="multipart/form-data">
+										<input type="hidden" asp-for="ClientId" id="ClientId" name="ClientId" value="@Model.ClientId" />
+										<input type="hidden" asp-for="ShowtimeId" id="ShowtimeId" name="ShowtimeId" value="@showtime.Id" />
+										<div class="mb-3">
+											<div>
+												<button type="submit" class="btn btn-primary">Reserve ticket</button>
+											</div>
+										</div>
+									</form>
+								</td>
+							}
+						</tr>
+					</tbody>
+				}
+			}
+		</table>
+	}
+}

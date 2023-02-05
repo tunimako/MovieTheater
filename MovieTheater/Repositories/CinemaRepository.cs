@@ -17,8 +17,20 @@ namespace MovieTheater.Repositories
         {
             return await _context.Cinemas.Include(a => a.Address)
                                          .Include(c => c.Company)
-                                         .Include(ch => ch.CinemaHalls)
+                                         .Include(ch => ch.CinemaHalls).OrderBy(x => x.Id)
                                          .ToListAsync();
+        }
+        public async Task<Cinema> GetCinemaByIdAsync(string? id)
+        {
+            return await _context.Cinemas.Include(ch => ch.CinemaHalls)
+                                         .ThenInclude(s => s.ShowTimes)
+                                         .FirstOrDefaultAsync(c => c.Id.ToString() == id);
+        }
+        public Cinema GetCinemaById(string? id)
+        {
+            return _context.Cinemas.Include(ch => ch.CinemaHalls)
+                                   .ThenInclude(s => s.ShowTimes)
+                                   .FirstOrDefault(c => c.Id.ToString() == id);
         }
     }
 }

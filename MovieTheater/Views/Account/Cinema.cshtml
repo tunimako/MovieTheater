@@ -1,21 +1,22 @@
-﻿@model IEnumerable<Cinema>
+﻿@using MovieTheater.ViewModels;
+@model ClientViewModel
 
 <body>
 	<div class="container">
 		<div class="row">
-			@*<div class="col-8" class="mb-3" style="width:40%">*@
-			@foreach (var cinema in Model)
+			@foreach (var cinema in Model.Cinemas)
 			{
-				<div class="col-lg-5 mb-3" @* style="width:40%"*@>
-					<div class="card" @*class="col-8" class="mb-3" style="width:40%" style="width: 20rem"*@>
+				<div class="col-lg-5 mb-3">
+					<div class="card">
 						<div class="card-header">
 							<div>
-								@*style="width:70%; float:left">*@
 								<h1 class="fw-normal">@cinema.Name.Remove(cinema.Name.Length - 5)</h1>
 							</div>
 						</div>
 						<div class="card-body">
-							<form method="post" asp-controller="Cinema" asp-action="Showtimes" asp-route-id="@cinema.Id" enctype="multipart/form-data">
+							<form method="post" asp-controller="Account" asp-action="Showtimes" enctype="multipart/form-data">
+								<input type="hidden" asp-for="ClientId" id="ClientId" name="ClientId" value="@Model.Client.Id.ToString()" />
+								<input type="hidden" asp-for="CinemaId" id="CinemaId" name="CinemaId" value="@cinema.Id" />
 								<div class="mb-3">
 									<!-- Company -->
 									<p>
@@ -85,7 +86,6 @@
 										<button type="submit" class="btn btn-primary">Showtimes</button>
 									</div>
 								</div>
-
 							</form>
 						</div>
 					</div>

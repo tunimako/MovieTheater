@@ -26,12 +26,21 @@ namespace MovieTheater.Repositories
         }
         public async Task<Movie> GetMovieByIdAsync(string? id)
         {
-            //return await _context.Movies.FromSqlInterpolated($"execute getMovieById @Id={id}").ToListAsync();
             return await _context.Movies.Include(x => x.MovieGenres)
                                         .Include(s=>s.ShowTimes)
                                         .ThenInclude(ch=>ch.CinemaHall)
                                         .ThenInclude(c=>c.Cinema)
+                                        .Include(s=>s.ShowTimes)
+                                        .ThenInclude(ch=>ch.ClientShowTimes)
                                         .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        }
+        public Movie GetMovieById(string? id)
+        {
+            return _context.Movies.Include(x => x.MovieGenres)
+                                        .Include(s=>s.ShowTimes)
+                                        .ThenInclude(ch=>ch.CinemaHall)
+                                        .ThenInclude(c=>c.Cinema)
+                                        .FirstOrDefault(x => x.Id.ToString() == id);
         }
         public async Task<Movie> GetMovieByIdAsyncAsNoTracking(string? id)
         {

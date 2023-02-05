@@ -13,22 +13,25 @@ namespace MovieTheater.Repositories
         {
             _context = context;
         }
+        public Task<IEnumerable<Client>> GetAllClientsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-        public async Task<IEnumerable<Cinema>> GetAllCinemas()
+        public Task<IEnumerable<Client>> GetClientsByCinemaAsync()
         {
-            return await _context.Cinemas.ToListAsync();
+            throw new NotImplementedException();
         }
-        public async Task<IEnumerable<ShowTime>> GetAllShowTimesByCinema(Cinema cinema)
+
+        public async Task<Client> GetClientByCredentialsAsync(string username, string password)
         {
-            return await _context.ShowTimes.Where(x => x.Cinema == cinema).ToListAsync();
-        }
-        public async Task<Cinema> GetCinemaById(string? id)
-        {
-            return await _context.Cinemas.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            return await _context.Clients.Include(sh => sh.ClientShowTimes)
+                                         .FirstOrDefaultAsync(x => x.Username == username && x.Password == password);
         }
         public async Task<Client> GetClientByIdAsync(string? id)
         {
-            return await _context.Clients.FirstOrDefaultAsync(x => x.Id.ToString() == id);
+            return await _context.Clients.Include(sh => sh.ClientShowTimes)
+                                         .FirstOrDefaultAsync(x => x.Id.ToString() == id);
         }   
         public bool Add(Client client)
         {
@@ -50,5 +53,7 @@ namespace MovieTheater.Repositories
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+
     }
 }

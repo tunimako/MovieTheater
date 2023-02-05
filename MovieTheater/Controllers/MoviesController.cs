@@ -7,6 +7,7 @@ using MovieTheater.ViewModels;
 using MovieTheater.Interfaces;
 using MovieTheater.Models;
 using System.Xml.Linq;
+using System.Text.Encodings.Web;
 
 namespace MovieTheater.Controllers
 {
@@ -159,6 +160,7 @@ namespace MovieTheater.Controllers
             return View(movieVM);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(EditMovieViewModel newMovie)
         {
             if (!ModelState.IsValid)

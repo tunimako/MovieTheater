@@ -1,6 +1,6 @@
 ﻿@model Movie
 
-<div class="row" >
+<div class="row">
 	<div class="col-8" class="mb-3">
 		<div class="card">
 			<div class="card-header">
@@ -53,21 +53,19 @@
 		</div>
 	</div>
 </div>
-<br><br>
-<h1 class ="mb-3">Movie Showtimes</h1>
+<br>
+<br>
+<h1 class="mb-3">Movie Showtimes</h1>
 <table class="table">
 	<thead>
-		@foreach (var showtime in Model.ShowTimes)
-		{
-			<tr>
-				<th>
-					@Html.DisplayNameFor(modelItem => showtime.CinemaHall.Cinema.Name)
-				</th>
-				<th>
-					@Html.DisplayNameFor(modelItem => showtime.CinemaHall.AvailableSeats)
-				</th>
-			</tr>
-		}
+		<tr>
+			<th align="center">
+				<h6>Cinema Name</h6>
+			</th>
+			<th align="center">
+				<h6>Available seats</h6>
+			</th>
+		</tr>
 	</thead>
 	<tbody>
 		@foreach (var showtime in Model.ShowTimes)
@@ -78,9 +76,17 @@
 				</td>
 				<td>
 					@{
+						int freeSeats = showtime.CinemaHall.AvailableSeats;
+						if (showtime.ClientShowTimes != null)
+						{
+							freeSeats = showtime.CinemaHall.AvailableSeats - showtime.ClientShowTimes.Count;
+						}
+					}
+					@freeSeats / @showtime.CinemaHall.AvailableSeats
+@*					@{
 						int freeSeats = showtime.CinemaHall.AvailableSeats - showtime.ClientShowTimes.Count;
 					}
-					@freeSeats/@showtime.CinemaHall.AvailableSeats
+					@freeSeats/@showtime.CinemaHall.AvailableSeats*@
 				</td>
 				<td>
 					<a asp-action="Detail" asp-route-id="@showtime.Id">Detail</a> |
