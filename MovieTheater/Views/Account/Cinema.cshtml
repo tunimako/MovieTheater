@@ -1,6 +1,18 @@
 ﻿@using MovieTheater.ViewModels;
 @model ClientViewModel
 
+<div class="mb-3">
+	<div style="width:15%; float:left">
+		<h4>Client Profile:</h4>
+	</div>
+	<div style="width:20%; float:left">
+		<a type="button" class="btn btn-lg btn-success" asp-action="Profile" asp-route-id="@Model.Client.Id.ToString()">Profile</a>
+	</div>
+</div>
+<br />
+<br />
+<br />
+<div></div>
 <body>
 	<div class="container">
 		<div class="row">
@@ -18,44 +30,39 @@
 								<input type="hidden" asp-for="ClientId" id="ClientId" name="ClientId" value="@Model.Client.Id.ToString()" />
 								<input type="hidden" asp-for="CinemaId" id="CinemaId" name="CinemaId" value="@cinema.Id" />
 								<div class="mb-3">
-									<!-- Company -->
 									<p>
 										<span style="font-size: 24px">Company:</span>
 										<span style="font-size: 20px">@cinema.Company.Name</span>
 									</p>
 								</div>
 								<div class="mb-3">
-									<!-- Address -->
 									<p>
 										<span style="font-size: 24px">Address:</span>
 										<span style="font-size: 20px">@cinema.Address.Street @cinema.Address.BuildingNumber @cinema.Address.City, @cinema.Address.Country</span>
 									</p>
 								</div>
 								<div class="mb-3">
-									<!-- Number of Cinema Halls -->
-
 									<p><span style="font-size: 24px ">Number of halls:  </span> <span style="font-size: 20px">@cinema.CinemaHalls.Count</span></p>
 								</div>
 								<div class="mb-3">
-									<!-- Open and close hours -->
 									<p>
 										<span style="font-size: 24px">Open hours:  </span>
 										@{
 											if (cinema.OpenTimeHour.ToString().Length < 2)
 											{
-												<span style="font-size: 20px" style="color:red;"><text>0</text>@cinema.OpenTimeHour :</span>
+													<span style="font-size: 20px" style="color:red;"><text>0</text>@cinema.OpenTimeHour :</span>
 											}
 											else
 											{
-												<span style="font-size: 20px">@cinema.OpenTimeHour :</span>
+													<span style="font-size: 20px">@cinema.OpenTimeHour :</span>
 											}
 											if (cinema.OpenTimeMinutes.ToString().Length < 2)
 											{
-												<span style="font-size: 20px">@cinema.OpenTimeMinutes<text>0</text></span>
+													<span style="font-size: 20px">@cinema.OpenTimeMinutes<text>0</text></span>
 											}
 											else
 											{
-												<span style="font-size: 20px">@cinema.OpenTimeMinutes</span>
+													<span style="font-size: 20px">@cinema.OpenTimeMinutes</span>
 											}
 										}
 									</p>
@@ -64,19 +71,19 @@
 										@{
 											if (cinema.CloseTimeHour.ToString().Length < 2)
 											{
-												<span style="font-size: 20px"><text>0</text>@cinema.CloseTimeHour :</span>
+													<span style="font-size: 20px"><text>0</text>@cinema.CloseTimeHour :</span>
 											}
 											else
 											{
-												<span style="font-size: 20px">@cinema.CloseTimeHour :</span>
+													<span style="font-size: 20px">@cinema.CloseTimeHour :</span>
 											}
 											if (cinema.CloseTimeMinutes.ToString().Length < 2)
 											{
-												<span style="font-size: 20px">@cinema.CloseTimeMinutes<text>0</text></span>
+													<span style="font-size: 20px">@cinema.CloseTimeMinutes<text>0</text></span>
 											}
 											else
 											{
-												<span style="font-size: 20px">@cinema.CloseTimeMinutes</span>
+													<span style="font-size: 20px">@cinema.CloseTimeMinutes</span>
 											}
 										}
 									</p>

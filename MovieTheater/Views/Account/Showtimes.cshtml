@@ -2,6 +2,15 @@
 @using MovieTheater.Models
 @model ClientShowtimesViewModel
 
+<form method="post" asp-controller="Account" asp-action="Login" enctype="multipart/form-data">
+	<input type="hidden" asp-for="Client.Username" id="Username" name="Username" value="@Model.Client.Username" />
+	<input type="hidden" asp-for="Client.Password" id="Password" name="Password" value="@Model.Client.Password" />
+	<div class="mb-3">
+		<div>
+			<button type="submit" class="btn btn-primary">Back</button>
+		</div>
+	</div>
+</form>
 @{
 	List<Movie> theaterMovies = new List<Movie>();
 	theaterMovies.AddRange(Model.Showtimes.Select(x => x.Movie).ToList().Distinct());
@@ -41,9 +50,7 @@
 							<th align="center">
 								<h6>Movie time</h6>
 							</th>
-
-							<th>
-							</th>
+							<th></th>
 						</tr>
 					</thead>
 				}
@@ -82,7 +89,9 @@
 								<td>
 									<form method="post" asp-controller="Account" asp-action="Reserve" enctype="multipart/form-data">
 										<input type="hidden" asp-for="ClientId" id="ClientId" name="ClientId" value="@Model.ClientId" />
+										<input type="hidden" asp-for="Client" id="Client" name="Client" value="Model.Client" />
 										<input type="hidden" asp-for="ShowtimeId" id="ShowtimeId" name="ShowtimeId" value="@showtime.Id" />
+										<input type="hidden" asp-for="Showtimes" id="Showtimes" name="Showtimes" value="Model.Showtimes" />
 										<div class="mb-3">
 											<div>
 												<button type="submit" class="btn btn-primary">Reserve ticket</button>

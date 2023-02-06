@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MovieTheater.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Data.Enums;
 using MovieTheater.ViewModels;
 using MovieTheater.Interfaces;
 using MovieTheater.Models;
-using System.Xml.Linq;
-using System.Text.Encodings.Web;
 
 namespace MovieTheater.Controllers
 {
@@ -16,7 +11,7 @@ namespace MovieTheater.Controllers
         private readonly IMoviesRepository _moviesRepository;
         private readonly IMovieGenreRepository _movieGenreRepository;
 
-        public MoviesController(IMoviesRepository moviesRepository,IMovieGenreRepository movieGenreRepository)
+        public MoviesController(IMoviesRepository moviesRepository, IMovieGenreRepository movieGenreRepository)
         {
             _moviesRepository = moviesRepository;
             _movieGenreRepository = movieGenreRepository;
@@ -24,7 +19,7 @@ namespace MovieTheater.Controllers
         public async Task<IActionResult> Index()
         {
             var movies = await _moviesRepository.GetAllMoviesAsync();
-            
+
             return View(movies);
         }
         public async Task<IActionResult> Detail(string? id)
@@ -67,7 +62,7 @@ namespace MovieTheater.Controllers
             }
             var checkBoxOptions = new List<EditMovieGenreViewModel>();
 
-            foreach(Genre genre in Enum.GetValues(typeof(Genre)))
+            foreach (Genre genre in Enum.GetValues(typeof(Genre)))
             {
                 if (originalMovieGenres.Contains(genre))
                 {
@@ -103,15 +98,13 @@ namespace MovieTheater.Controllers
             return View(movieVM);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, EditMovieViewModel passedMovie)
-        {         
-            if (!ModelState.IsValid && passedMovie.MovieGenres != null) // patikrinti ar tikrai būtinas passedMovie patikrinimas
+        {
+            if (!ModelState.IsValid && passedMovie.MovieGenres != null)
             {
                 ModelState.AddModelError("", "Failed to edit Movie");
                 return View("Edit", passedMovie);
             }
-
             var movie = await _moviesRepository.GetMovieByIdAsync(id);
 
             movie.Name = passedMovie.Name;
@@ -124,8 +117,8 @@ namespace MovieTheater.Controllers
             {
                 _movieGenreRepository.DeleteMovieGenres(movie.MovieGenres);
             }
-
             var updatedMovieGernes = new List<MovieGenre>();
+
             foreach (var genre in passedMovie.CheckedMovieGenres)
             {
                 MovieGenre movieGenre = new MovieGenre(Enum.TryParse(genre, out Genre genreValue) ?
@@ -136,31 +129,17 @@ namespace MovieTheater.Controllers
                 updatedMovieGernes.Add(movieGenre);
             }
             movie.MovieGenres = updatedMovieGernes;
-            
+
             _moviesRepository.UpdateMovie(movie);
             return RedirectToAction("Index");
         }
         [HttpGet]
         public IActionResult Create()
         {
-            //var checkBoxOptions = new List<EditMovieGenreViewModel>();
-            // foreach(Genre genre in Enum.GetValues(typeof(Genre)))
-            //{
-            //    var checBoxOption = new EditMovieGenreViewModel()
-            //    {
-            //        GenreName = genre.ToString(),
-            //        IsChecked = false
-            //    };
-            //    checkBoxOptions.Add(checBoxOption);
-            //}
-            
             var movieVM = new EditMovieViewModel();
-            //movieVM.CheckedMovieGenres = checkBoxOptions;
-
             return View(movieVM);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(EditMovieViewModel newMovie)
         {
             if (!ModelState.IsValid)
@@ -174,7 +153,7 @@ namespace MovieTheater.Controllers
                                   newMovie.Duration,
                                   newMovie.AgeRating);
 
-             var updatedMovieGernes = new List<MovieGenre>();
+            var updatedMovieGernes = new List<MovieGenre>();
 
             foreach (var genre in newMovie.CheckedMovieGenres)
             {
@@ -185,7 +164,7 @@ namespace MovieTheater.Controllers
                 updatedMovieGernes.Add(movieGenre);
             }
             movie.MovieGenres = updatedMovieGernes;
-            _moviesRepository.Add(movie);    
+            _moviesRepository.Add(movie);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Delete(string id)

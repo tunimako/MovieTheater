@@ -32,6 +32,15 @@ namespace MovieTheater.Repositories
                                            .Where(x => x.CinemaHall.CinemaId.ToString() == id)
                                            .ToListAsync();
         }
+        public async Task<IEnumerable<ShowTime>> GetAllShowtimesAsync()
+        {
+            return await _context.ShowTimes.Include(ch => ch.CinemaHall)
+                                           .ThenInclude(c => c.Cinema)
+                                           .ThenInclude(ch1 => ch1.CinemaHalls)
+                                           .Include(m => m.Movie)
+                                           .Include(cl => cl.ClientShowTimes)
+                                           .ToListAsync();
+        }
         public async Task<ShowTime> GetShowtimeByIdAsync(string? id)
         {
             return await _context.ShowTimes.Include(x => x.Cinema)

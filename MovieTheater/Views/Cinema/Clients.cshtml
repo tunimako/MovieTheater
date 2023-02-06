@@ -1,0 +1,75 @@
+﻿@model Cinema
+
+<div>
+	<div style="width:30%; float:left">
+		<h1>@Model.Name Clients</h1>
+	</div>
+</div>
+<br>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				First Name
+			</th>
+			<th>
+				Last Name
+			</th>
+			<th >
+				Email Address
+			</th>
+			<th >
+				Phone Number
+			</th>
+			<th align="center">
+				Age
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			List<Client> clients = new List<Client>();
+			clients.AddRange(Model.ShowTimes.SelectMany(showtime => showtime.ClientShowTimes)
+											.Select(clientShowtime => clientShowtime.Client)
+											.ToList().Distinct());
+		}
+		@foreach (var client in clients)
+		{
+			<tr>
+				<td>
+					@client.FirstName
+				</td>
+				<td >
+					@client.LastName
+				</td>
+				<td>
+					@if (client.EmailAddress == null)
+					{
+						<p>-</p>
+					}
+					else
+					{
+						@client.EmailAddress
+					}					
+				</td>
+				<td >
+					@if (client.PhoneNumber == null)
+					{
+						<p>-</p>
+					}
+					else
+					{
+						@client.PhoneNumber
+					}
+				</td>
+				<td >
+					@{
+						int age = (DateTime.Today - @client.DateOfBirth).Days / 365;
+					}
+					@age
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Interfaces;
 using MovieTheater.Models;
-using MovieTheater.Repositories;
 using MovieTheater.ViewModels;
 
 namespace MovieTheater.Controllers
@@ -29,7 +28,7 @@ namespace MovieTheater.Controllers
 		[HttpGet]
 		public IActionResult Login()
 		{
-			LoginViewModel loginViewModel = new LoginViewModel();
+			var loginViewModel = new LoginViewModel();
 			return View(loginViewModel);
 		}
 		[HttpPost]
@@ -39,7 +38,7 @@ namespace MovieTheater.Controllers
             {
                 return View(loginViewModel);
             }
-            ClientViewModel client = new ClientViewModel();
+            var client = new ClientViewModel();
             client.Client = await _clientRepository.GetClientByCredentialsAsync(loginViewModel.Username,
                                                                                 loginViewModel.Password);
             client.Cinemas = await _cinemaRepository.GetAll();
@@ -59,11 +58,13 @@ namespace MovieTheater.Controllers
                 client.Cinemas = await _cinemaRepository.GetAll();
                 return View("Cinema", client);
             }
+
             var clientShowtimesViewModel = new ClientShowtimesViewModel()
             {
                 Showtimes = await _showtimeRepository.GetAllByCinemaIdAsync(client.CinemaId),
                 Movies = await _moviesRepository.GetAllMoviesAsync(),
                 Cinema = await _cinemaRepository.GetCinemaByIdAsync(client.CinemaId),
+                Client = await _clientRepository.GetClientByIdAsync(client.ClientId),   
                 ClientId = client.ClientId
             };
 
@@ -71,15 +72,15 @@ namespace MovieTheater.Controllers
         }
         public async Task<IActionResult> Reserve(ClientShowtimesViewModel clientShowtimesViewModel)
         {
-            Client client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId);
+            var client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId);
 
-            ClientShowTime clientShowTime = new ClientShowTime()
+            var clientShowTime = new ClientShowTime()
             {
                 Client = client,
                 ShowTime = await _showtimeRepository.GetShowtimeByIdAsync(clientShowtimesViewModel.ShowtimeId)
             };
 
-            ClientViewModel clientViewModel = new ClientViewModel()
+            var clientViewModel = new ClientViewModel()
             {
                 Client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId),
                 Cinemas = await _cinemaRepository.GetAll(),
@@ -89,10 +90,20 @@ namespace MovieTheater.Controllers
             clientShowtimesViewModel.ClientViewModel = clientViewModel;
             clientShowtimesViewModel.Showtimes = await _showtimeRepository.GetAllByCinemaIdAsync(clientViewModel.CinemaId);
             clientShowtimesViewModel.Cinema = await _cinemaRepository.GetCinemaByIdAsync(clientViewModel.CinemaId);
+            clientShowtimesViewModel.Client = await _clientRepository.GetClientByIdAsync(clientViewModel.ClientId);   
 
             if (!ModelState.IsValid)
             {
-                return View(clientShowtimesViewModel);
+                return View("Showtimes", clientShowtimesViewModel);
+            }
+
+            int freeSeats = clientShowTime.ShowTime.CinemaHall.AvailableSeats -
+                            clientShowTime.ShowTime.ClientShowTimes.Count;
+
+            if (freeSeats <= 0)
+            {
+                TempData["Error"] = "Showtime is full.";
+                return View("Showtimes", clientShowtimesViewModel);
             }
 
             if (client.ClientShowTimes.Where(x => x.ShowTimeId.ToString() == clientShowtimesViewModel.ShowtimeId)
@@ -101,13 +112,102 @@ namespace MovieTheater.Controllers
                 TempData["Error"] = "Client has already bought a ticket to this movie.";
                 return View("Showtimes", clientShowtimesViewModel);
             }
-            if (clientShowTime != null )
+
+            if (clientShowTime != null)
             {
                 await _clientShowtimeRepository.Add(clientShowTime);
                 TempData["Success"] = "Ticket was reserved.";
                 return View("Showtimes", clientShowtimesViewModel);
             }
+
             return View("Showtimes", clientShowtimesViewModel);
         }
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Register(NewClientViewModel newClient)
+        {
+            if (!ModelState.IsValid)
+            { 
+                return View("Register");
+            }
+
+            Client client = new Client
+            {
+                FirstName = newClient.FirstName,
+                LastName = newClient.LastName,
+                DateOfBirth = newClient.DateOfBirth,
+                EmailAddress = newClient.EmailAddress,
+                PhoneNumber = newClient.PhoneNumber,
+                Username = newClient.Username,
+                Password = newClient.Password
+            };
+            
+            if (client != null)
+            {
+                _clientRepository.Add(client);
+            }
+
+            return View("Login");
+        }
+        public async Task<IActionResult> Profile(string? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var showtimes = await _showtimeRepository.GetAllShowtimesAsync();
+            var clientShowtimes = await _clientShowtimeRepository.GetAllByClientIdAsync(id);
+            List<ShowTime> listOfShowtimes = new List<ShowTime>();
+
+            foreach (var clientShowtime in clientShowtimes)
+            {
+                foreach(var showtime in showtimes)
+                {
+                    if(showtime== clientShowtime.ShowTime)
+                    {
+                        listOfShowtimes.Add(showtime);
+                    }
+                }
+            }
+
+            var clientShowtimesViewModel = new ClientShowtimesViewModel()
+            {
+                Showtimes = listOfShowtimes,
+                Client = await _clientRepository.GetClientByIdAsync(id)   
+            };
+            
+            if(clientShowtimesViewModel == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            return View(clientShowtimesViewModel);
+        }
+        //public async Task<IActionResult> DeleteClientShowtime(ClientShowtimesViewModel clientShowtimesViewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var client = new ClientViewModel();
+        //        client.Client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId);
+        //        client.Cinemas = await _cinemaRepository.GetAll();
+        //        return View("Cinema", client);
+        //    }
+        //    var ClientShowtime = new ClientShowTime()
+        //    {
+        //        Client = await _clientRepository.GetClientByIdAsyncAsNoTracking(clientShowtimesViewModel.ClientId),
+        //        ShowTime = await _showtimeRepository.GetShowtimeByIdAsyncAsNoTracking(clientShowtimesViewModel.ShowtimeId)
+        //    };
+
+        //    if (ClientShowtime != null)
+        //    {
+        //        _clientShowtimeRepository.Delete(ClientShowtime);
+        //    }
+
+        //    return View(clientShowtimesViewModel);
+        //}
     }
 }

@@ -1,5 +1,116 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using MovieTheater.ViewModels
+@using MovieTheater.Models
+@model ClientShowtimesViewModel
+
+<form method="post" asp-controller="Account" asp-action="Login" enctype="multipart/form-data">
+	<input type="hidden" asp-for="Client.Username" id="Username" name="Username" value="@Model.Client.Username" />
+	<input type="hidden" asp-for="Client.Password" id="Password" name="Password" value="@Model.Client.Password" />
+	<div class="mb-3">
+		<div>
+			<button type="submit" class="btn btn-primary">Back</button>
+		</div>
+	</div>
+</form>
+<div class="row">
+	<div class="col-8" class="mb-3">
+		<div class="card">
+			<div class="card-header">
+				<div style="width:70%; float:left">
+					<h1>@Model.Client.FirstName @Model.Client.LastName </h1>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="mb-3">
+					<h4>Username: </h4>
+					@Model.Client.Username
+				</div>
+				<div class="mb-3">
+					<h4>Age: </h4>
+					@{
+						int age = (DateTime.Today - Model.Client.DateOfBirth).Days / 365;
+					}
+					<p><span style="font-size: 20px">@age</span></p>
+				</div>
+				<div class="mb-3">
+					<h4>Email Address:</h4>
+					@if (Model.Client.EmailAddress == null)
+					{
+						<p><span style="font-size: 20px">-</span></p>
+					}
+					else
+					{
+						<p><span style="font-size: 20px">@Model.Client.EmailAddress</span></p>
+					}
+				</div>
+				<div class="mb-3">
+					<h4>Phone number:</h4>
+					@if (Model.Client.PhoneNumber == null)
+					{
+						<p><span style="font-size: 20px">-</span></p>
+					}
+					else
+					{
+						<p><span style="font-size: 20px">@Model.Client.PhoneNumber</span></p>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<br>
+<h1 class="mb-3">Client showtimes</h1>
+<table class="table">
+	<thead>
+		<tr>
+			<th align="center">
+				<h6>Cinema Name</h6>
+			</th>
+			<th align="center">
+				<h6>Cinema Hall</h6>
+			</th>
+			<th align="center">
+				<h6>Movie Name</h6>
+			</th>
+			<th align="center">
+				<h6>Movie Date</h6>
+			</th>
+			<th align="center">
+				<h6>Movie Time</h6>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var showtime in Model.Showtimes)
+		{
+			<tr>
+				<td>
+					@showtime.Cinema.Name
+				</td>
+				<td>
+					@{
+						int cinemaHallCount = 0;
+					}
+					@foreach (var cinemaHall in showtime.Cinema.CinemaHalls.OrderBy(x => x.Id).ToList())
+					{
+						cinemaHallCount++;
+						if (cinemaHall.Id == showtime.CinemaHallId)
+						{
+							<p>Hall - @cinemaHallCount</p>
+						}
+					}
+				</td>
+				<td>
+					@showtime.Movie.Name
+				</td>
+				<td>
+					@showtime.Start.ToShortDateString()
+				</td>
+				<td>
+					@showtime.Start.ToShortTimeString()
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+

@@ -58,21 +58,6 @@ namespace MovieTheater.Data
 
                 context.Movies.AddRange(new List<Movie>()
                     {
-                        //new Movie("The Shawshank Redemption", "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.", 9.3, new TimeSpan(2,22,00), AgeRating.N13)
-                        //{
-                        //    MovieGenres = new List<MovieGenre>()
-                        //    {
-                        //        new MovieGenre(Genre.Drama)
-                        //    }
-                        //},
-                        //new Movie("The Godfather", "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son.", 9.2, new TimeSpan(2, 55, 00), AgeRating.N16)
-                        //{
-                        //    MovieGenres = new List<MovieGenre>()
-                        //    {
-                        //        new MovieGenre(Genre.Drama),
-                        //        new MovieGenre(Genre.Crime)
-                        //    }
-                        //},
                         new Movie("The Dark Knight", "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.", 9.0, new TimeSpan(2, 32, 00), AgeRating.N13)
                         {
                             MovieGenres = new List<MovieGenre>()
@@ -193,7 +178,8 @@ namespace MovieTheater.Data
                                     new MovieGenre(Genre.Drama)
                                 }
                             },
-                            CinemaHall = kaunasForum.CinemaHalls.First()
+                            CinemaHall = kaunasForum.CinemaHalls.First(),
+                            Cinema = kaunasForum
                         },
                         new ShowTime(new DateTime(2023, 01, 23, 16, 00, 00))
                         {
@@ -205,14 +191,10 @@ namespace MovieTheater.Data
                                     new MovieGenre(Genre.Crime)
                                 }
                             },
-                            CinemaHall = vilniusForum.CinemaHalls.First()
+                            CinemaHall = vilniusForum.CinemaHalls.First(),
+                            Cinema = vilniusForum
                         }
                     });
-                    //context.AddRange(new List<ShowTime>()
-                    //{
-                    //    new ShowTime(new DateTime(2023,01,22,18,20,00)),
-                    //    new ShowTime(new DateTime(2023,01,23,16,00,00))
-                    //});
                     context.SaveChanges();
                 }
             }

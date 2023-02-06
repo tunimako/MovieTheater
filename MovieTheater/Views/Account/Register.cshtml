@@ -1,0 +1,63 @@
+﻿@using MovieTheater.ViewModels;
+@model NewClientViewModel;
+
+<div class="row">
+    <div class="col-md-6 offset-3 align-content-center">
+        <div class="offset-4 align-center">
+            <h4>Sign up new account</h4>
+        </div>
+        <br />
+        @if (TempData["Error"] != null)
+        {
+            <div class="col-md-8 offset-2 alert alert-danger">
+                <span><b>Error</b> - @TempData["Error"] </span>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <form asp-action="Register">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateOfBirth" class="control-label"></label>
+                        <input type="date" asp-for="DateOfBirth" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control" />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+					<div class="form-group">
+						<label asp-for="PhoneNumber" class="control-label"></label>
+						<input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+					</div>
+                    <div class="form-group">
+                        <label asp-for="Username" class="control-label"></label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group mb-3 offset-5">
+                        <input class="btn btn-outline-success float-right" type="submit" value="Sign up" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

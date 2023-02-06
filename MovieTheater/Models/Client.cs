@@ -31,5 +31,10 @@ namespace MovieTheater.Models
             Password = password;
             ClientShowTimes = new List<ClientShowTime>();
         }
+        public Client()
+        {
+            Id = Guid.NewGuid();
+            ClientShowTimes = new List<ClientShowTime>();
+        }
     }
 }

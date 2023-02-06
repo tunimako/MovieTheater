@@ -6,7 +6,7 @@ namespace MovieTheater.Models
     public class ShowTime
     {
         [Key]
-        public Guid Id { get; set; } //Galbūt galime saugoti kaip stringą sudarytą iš filmo pavadinimo ir skaičiaus indikuojančiu, kelintas tai yra šio filmo sensas;
+        public Guid Id { get; set; }
         [ForeignKey("Movie")]
         public Guid MovieId { get; set; }
         public Movie Movie { get; set; }

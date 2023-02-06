@@ -66,7 +66,6 @@ namespace MovieTheater.Controllers
             }
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ShowtimeCreate(CreateShowtimeViewModel newShowtime)
         {
             if (!ModelState.IsValid || !SowtimeTimeValidation(newShowtime))
@@ -173,6 +172,15 @@ namespace MovieTheater.Controllers
                 return RedirectToAction("Showtimes", new { id = showtime.Cinema.Id });
             }
             return RedirectToAction("Index");
+        }
+        public IActionResult Clients(string? id)
+        {
+            if(id != null)
+            {
+                var cinema = _cinemaRepository.GetCinemaById(id);
+                return View("Clients", cinema);
+            }
+            return View("Cinema");
         }
     }
 }

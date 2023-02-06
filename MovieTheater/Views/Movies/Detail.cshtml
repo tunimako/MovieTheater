@@ -17,7 +17,7 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<form method="post" asp-controller="Movie" asp-action="Edit" enctype="multipart/form-data">
+
 					<div class="mb-3">
 						@{
 							string movieGenres = "";
@@ -42,13 +42,6 @@
 						<p><span style="font-size: 26px">Movie Duration: </span> <span style="font-size: 20px">@Model.Duration</span></p>
 						<p><span style="font-size: 26px">Movie Age rating: </span> <span style="font-size: 20px">@Model.AgeRating </span></p>
 					</div>
-
-					<div class="mb-3">
-						<div>
-							<button type="submit" class="btn btn-primary">Edit</button>
-						</div>
-					</div>
-				</form>
 			</div>
 		</div>
 	</div>
@@ -83,18 +76,8 @@
 						}
 					}
 					@freeSeats / @showtime.CinemaHall.AvailableSeats
-@*					@{
-						int freeSeats = showtime.CinemaHall.AvailableSeats - showtime.ClientShowTimes.Count;
-					}
-					@freeSeats/@showtime.CinemaHall.AvailableSeats*@
-				</td>
-				<td>
-					<a asp-action="Detail" asp-route-id="@showtime.Id">Detail</a> |
-					<a asp-action="Edit" asp-route-id="@showtime.Id">Edit</a> |
-					<a asp-action="Delete" asp-route-id="@showtime.Id">Delete</a>
 				</td>
 			</tr>
 		}
 	</tbody>
 </table>
-

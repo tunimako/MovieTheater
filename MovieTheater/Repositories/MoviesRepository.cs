@@ -70,28 +70,7 @@ namespace MovieTheater.Repositories
         public bool Save()
         {
             var saved = _context.SaveChanges();
-            //try
-            //{
-            //    var saved = _context.SaveChanges();
-            //}
-            //catch (DbUpdateConcurrencyException ex)
-            //{
-            //    var entry = ex.Entries.Single();
-            //    var clientValues = entry.Entity;
-            //    var databaseValues = entry.GetDatabaseValues();
-            //    return false;
-            //}
             return saved > 0 ? true : false;
-        }
-
-        Task<Movie> IMoviesRepository.GetMovieAsync(string? id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(Movie movie)
-        {
-            throw new NotImplementedException();
         }
     }
 }

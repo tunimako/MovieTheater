@@ -30,6 +30,8 @@ namespace MovieTheater.Repositories
         {
             return _context.Cinemas.Include(ch => ch.CinemaHalls)
                                    .ThenInclude(s => s.ShowTimes)
+                                   .ThenInclude(s => s.ClientShowTimes)
+                                   .ThenInclude(s => s.Client)
                                    .FirstOrDefault(c => c.Id.ToString() == id);
         }
     }

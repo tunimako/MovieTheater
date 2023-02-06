@@ -25,14 +25,23 @@ namespace MovieTheater.Repositories
 
         public async Task<Client> GetClientByCredentialsAsync(string username, string password)
         {
-            return await _context.Clients.Include(sh => sh.ClientShowTimes)
+            return await _context.Clients.Include(csh => csh.ClientShowTimes)
+                                         .ThenInclude(s => s.ShowTime)
+                                         .ThenInclude(s => s.CinemaHall)
+                                         .ThenInclude(s => s.Cinema)
                                          .FirstOrDefaultAsync(x => x.Username == username && x.Password == password);
         }
         public async Task<Client> GetClientByIdAsync(string? id)
         {
             return await _context.Clients.Include(sh => sh.ClientShowTimes)
                                          .FirstOrDefaultAsync(x => x.Id.ToString() == id);
-        }   
+        }
+        //public async Task<Client> GetClientByIdAsyncAsNoTracking(string? id)
+        //{
+        //    return await _context.Clients.Include(sh => sh.ClientShowTimes)
+        //                                 .AsNoTracking()
+        //                                 .FirstOrDefaultAsync(x => x.Id.ToString() == id);
+        //}
         public bool Add(Client client)
         {
             _context.Add(client);

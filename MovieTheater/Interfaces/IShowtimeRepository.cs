@@ -5,6 +5,7 @@ namespace MovieTheater.Interfaces
 	public interface IShowtimeRepository
 	{
 		public Task<IEnumerable<ShowTime>> GetAllByCinemaIdAsync(string? id);
+		public Task<IEnumerable<ShowTime>> GetAllShowtimesAsync();
 		public Task<ShowTime> GetShowtimeByCinemaIdAsync(string? id);
 		public Task<ShowTime> GetShowtimeByIdAsync(string? id);
 		public bool Add(ShowTime showtime);

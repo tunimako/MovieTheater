@@ -3,14 +3,12 @@
 <body>
 	<div class="container">
 		<div class="row">
-			@*<div class="col-8" class="mb-3" style="width:40%">*@
 			@foreach (var cinema in Model)
 			{
-				<div class="col-lg-5 mb-3" @* style="width:40%"*@>
-					<div class="card" @*class="col-8" class="mb-3" style="width:40%" style="width: 20rem"*@>
+				<div class="col-lg-5 mb-3">
+					<div class="card">
 						<div class="card-header">
 							<div>
-								@*style="width:70%; float:left">*@
 								<h1 class="fw-normal">@cinema.Name.Remove(cinema.Name.Length - 5)</h1>
 							</div>
 						</div>
@@ -81,11 +79,13 @@
 									</p>
 								</div>
 								<div class="mb-3">
-									<div>
+									<div style ="width:30%; float:left">
 										<button type="submit" class="btn btn-primary">Showtimes</button>
 									</div>
+									<div style="width:30%; float:left">
+									<a type="button" class="btn btn-primary" asp-action="Clients" asp-route-id="@cinema.Id">Clients</a>
+									</div>
 								</div>
-
 							</form>
 						</div>
 					</div>
