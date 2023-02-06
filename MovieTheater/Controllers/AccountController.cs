@@ -187,27 +187,5 @@ namespace MovieTheater.Controllers
 
             return View(clientShowtimesViewModel);
         }
-        //public async Task<IActionResult> DeleteClientShowtime(ClientShowtimesViewModel clientShowtimesViewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var client = new ClientViewModel();
-        //        client.Client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId);
-        //        client.Cinemas = await _cinemaRepository.GetAll();
-        //        return View("Cinema", client);
-        //    }
-        //    var ClientShowtime = new ClientShowTime()
-        //    {
-        //        Client = await _clientRepository.GetClientByIdAsyncAsNoTracking(clientShowtimesViewModel.ClientId),
-        //        ShowTime = await _showtimeRepository.GetShowtimeByIdAsyncAsNoTracking(clientShowtimesViewModel.ShowtimeId)
-        //    };
-
-        //    if (ClientShowtime != null)
-        //    {
-        //        _clientShowtimeRepository.Delete(ClientShowtime);
-        //    }
-
-        //    return View(clientShowtimesViewModel);
-        //}
     }
 }

@@ -13,6 +13,7 @@ namespace MovieTheater.Repositories
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Cinema>> GetAll()
         {
             return await _context.Cinemas.Include(a => a.Address)

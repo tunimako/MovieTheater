@@ -13,6 +13,7 @@ namespace MovieTheater.Repositories
 		{
 			_context = context;
 		}
+
 		public List<CinemaHall> GetAllCinemaHalls(string? id)
 		{
 			return _context.CinemaHalls.Include(sh => sh.ShowTimes)

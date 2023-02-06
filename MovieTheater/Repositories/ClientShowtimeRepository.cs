@@ -13,6 +13,7 @@ namespace MovieTheater.Repositories
         {
             _context = context;
         }
+
         public async Task<IEnumerable<ClientShowTime>> GetAllByClientIdAsync(string? id)
         {
             return await _context.ClientShowTimes.Where(x => x.ClientId.ToString() == id)

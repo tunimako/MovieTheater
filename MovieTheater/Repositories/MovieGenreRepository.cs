@@ -28,19 +28,16 @@ namespace MovieTheater.Repositories
 			_context.Add(movieGenre);
 			return Save();
 		}
-
 		public bool Delete(MovieGenre movieGenre)
 		{
 			_context.Remove(movieGenre);
 			return Save();
 		}
-
 		public bool Save()
 		{
 			var saved = _context.SaveChanges();
 			return saved > 0 ? true : false;
 		}
-
 		public bool Update(MovieGenre movieGenre)
 		{
 			_context.Update(movieGenre);

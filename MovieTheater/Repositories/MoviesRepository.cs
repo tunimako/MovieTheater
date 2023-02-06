@@ -17,6 +17,7 @@ namespace MovieTheater.Repositories
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
         { 
             //return await _context.Movies.FromSqlInterpolated($"Exec getAllMoviesWithGenres").ToListAsync();
@@ -66,7 +67,6 @@ namespace MovieTheater.Repositories
             _context.Movies.Update(movie);
             return Save();
         }
-
         public bool Save()
         {
             var saved = _context.SaveChanges();

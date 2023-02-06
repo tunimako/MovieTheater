@@ -21,7 +21,6 @@ namespace MovieTheater.Repositories
                                            .ThenInclude(ch1 => ch1.CinemaHalls).OrderBy(x => x.Id)
                                            .FirstOrDefaultAsync(x => x.CinemaId.ToString() == id);
         }
-
         public async Task<IEnumerable<ShowTime>> GetAllByCinemaIdAsync(string? id)
         {
             return await _context.ShowTimes.Include(ch => ch.CinemaHall)
