@@ -42,11 +42,13 @@ namespace MovieTheater.Controllers
             client.Client = await _clientRepository.GetClientByCredentialsAsync(loginViewModel.Username,
                                                                                 loginViewModel.Password);
             client.Cinemas = await _cinemaRepository.GetAll();
+
             if (client.Client == null)
             {
                 TempData["Error"] = "Wrong credentials. Please try again!";
                 return View(loginViewModel);
             }
+
             return View("Cinema", client);
         }
         public async Task<IActionResult> Showtimes(ClientViewModel client)
@@ -72,11 +74,9 @@ namespace MovieTheater.Controllers
         }
         public async Task<IActionResult> Reserve(ClientShowtimesViewModel clientShowtimesViewModel)
         {
-            var client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId);
-
             var clientShowTime = new ClientShowTime()
             {
-                Client = client,
+                Client = await _clientRepository.GetClientByIdAsync(clientShowtimesViewModel.ClientId),
                 ShowTime = await _showtimeRepository.GetShowtimeByIdAsync(clientShowtimesViewModel.ShowtimeId)
             };
 
@@ -97,8 +97,8 @@ namespace MovieTheater.Controllers
                 return View("Showtimes", clientShowtimesViewModel);
             }
 
-            int freeSeats = clientShowTime.ShowTime.CinemaHall.AvailableSeats -
-                            clientShowTime.ShowTime.ClientShowTimes.Count;
+            int freeSeats = clientShowTime.ShowTime.CinemaHall.AvailableSeats
+                            - clientShowTime.ShowTime.ClientShowTimes.Count;
 
             if (freeSeats <= 0)
             {
@@ -106,8 +106,8 @@ namespace MovieTheater.Controllers
                 return View("Showtimes", clientShowtimesViewModel);
             }
 
-            if (client.ClientShowTimes.Where(x => x.ShowTimeId.ToString() == clientShowtimesViewModel.ShowtimeId)
-                                      .ToList().Count > 0)
+            if (clientShowTime.Client.ClientShowTimes.Where(x => x.ShowTimeId.ToString() == clientShowtimesViewModel.ShowtimeId)
+                                                     .ToList().Count > 0)
             {
                 TempData["Error"] = "Client has already bought a ticket to this movie.";
                 return View("Showtimes", clientShowtimesViewModel);

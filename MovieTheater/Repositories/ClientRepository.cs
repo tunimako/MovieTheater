@@ -14,14 +14,6 @@ namespace MovieTheater.Repositories
             _context = context;
         }
 
-        public Task<IEnumerable<Client>> GetAllClientsAsync()
-        {
-            throw new NotImplementedException();
-        }
-        public Task<IEnumerable<Client>> GetClientsByCinemaAsync()
-        {
-            throw new NotImplementedException();
-        }
         public async Task<Client> GetClientByCredentialsAsync(string username, string password)
         {
             return await _context.Clients.Include(csh => csh.ClientShowTimes)

@@ -20,7 +20,6 @@ namespace MovieTheater.Repositories
 
         public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
         { 
-            //return await _context.Movies.FromSqlInterpolated($"Exec getAllMoviesWithGenres").ToListAsync();
             return await _context.Movies.Include(x => x.MovieGenres)
                                         .Include(s=>s.ShowTimes)
                                         .ThenInclude(c=>c.Cinema).ToListAsync();

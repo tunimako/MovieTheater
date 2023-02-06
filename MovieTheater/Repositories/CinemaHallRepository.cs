@@ -17,8 +17,8 @@ namespace MovieTheater.Repositories
 		public List<CinemaHall> GetAllCinemaHalls(string? id)
 		{
 			return _context.CinemaHalls.Include(sh => sh.ShowTimes)
-										     .Where(x => x.CinemaId.ToString() == id)
-											 .ToList();
+									   .Where(x => x.CinemaId.ToString() == id)
+									   .ToList();
 		}
 	}
 }

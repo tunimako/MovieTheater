@@ -30,11 +30,13 @@ namespace MovieTheater.Controllers
             {
                 return NotFound();
             }
-            var showtimesMoviesViewModel = new ShowtimesMoviesViewModel();
-            showtimesMoviesViewModel.Showtimes = await _showtimeRepository.GetAllByCinemaIdAsync(id);
-            showtimesMoviesViewModel.Movies = await _moviesRepository.GetAllMoviesAsync();
-            showtimesMoviesViewModel.Cinema = await _cinemaRepository.GetCinemaByIdAsync(id);
-            showtimesMoviesViewModel.Id = id;
+            var showtimesMoviesViewModel = new ShowtimesMoviesViewModel()
+            {
+                Showtimes = await _showtimeRepository.GetAllByCinemaIdAsync(id),
+                Movies = await _moviesRepository.GetAllMoviesAsync(),
+                Cinema = await _cinemaRepository.GetCinemaByIdAsync(id),
+                Id = id
+            };
 
             if (showtimesMoviesViewModel == null)
             {
@@ -141,7 +143,7 @@ namespace MovieTheater.Controllers
             {
                 if (showtime.Start.DayOfYear == newShowtime.Day.DayOfYear)
                 {
-                    DateTime showtimeEnd = showtime.Start.Add(showtime.Movie.Duration);
+                    DateTime showtimeEnd = showtime.Start.Add(newShowtime.Movie.Duration);
                     long showtimeEndTick = showtimeEnd.TimeOfDay.Ticks;
 
                     if (showtimeEnd.Day > movieStart.Day)
@@ -175,7 +177,7 @@ namespace MovieTheater.Controllers
         }
         public IActionResult Clients(string? id)
         {
-            if(id != null)
+            if (id != null)
             {
                 var cinema = _cinemaRepository.GetCinemaById(id);
                 return View("Clients", cinema);
